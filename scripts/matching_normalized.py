@@ -6,7 +6,7 @@ from excel_part_numbers import excel_part_number
 
 
 # Load the JSON catalogue
-with open("catalogue_extraction.json", "r", encoding="utf-8") as file:
+with open("../source_documents/catalogue_extraction.json", "r", encoding="utf-8") as file:
     catalogue_extraction = json.load(file)
 
 

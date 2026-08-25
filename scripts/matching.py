@@ -1,6 +1,6 @@
 import json
 
-from excel_part_numbers import excel_part_number
+from scripts.excel_part_numbers import excel_part_number
 
 
 # Load the JSON catalogue
