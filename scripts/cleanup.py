@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-with open("catalogue_extraction.json", "r", encoding="utf-8") as file:
+with open("../source_documents/catalogue_extraction.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
 rows = []
