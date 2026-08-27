@@ -11,6 +11,9 @@ input_file = BASE_DIR / "scripts" / "catalogue_text_clean.csv"
 #read CSV
 df = pd.read_csv(input_file)
 
+#Keep only rows with page numbers between 19 and 565
+df = df[(df["page_number"] >= 19) & (df["page_number"] <= 565)]
+
 def is_possible_part_number(text):
     if pd.isna(text):
         return False
@@ -19,10 +22,6 @@ def is_possible_part_number(text):
 
     if not text:
         return False
-
-    # Remove values containing only numbers
-    #if text.isdigit():
-    #    return False
 
     # Must contain at least one number
     if not any(char.isdigit() for char in text):
