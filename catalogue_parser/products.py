@@ -1,28 +1,129 @@
-def extract_products(df):
-  products = []
-  columns_lower = [str(c).lower() for c in df.columns]
-  possible_part_num_col = "PART NUMBER"
-  part_num_col = None
-  for col in df.columns:
-    if str(col).lower().strip() in possible_part_num_col:
-      part_num_col = col
-      break
-    if part_num_col is None:
-      return products
-    for _, row in df.iterrows():
-      product = {
-        "part_num": row.get(part_num_col),
-        "specifications": {}
-      }
-      if "product" in columns_lower:
-        idx = columns_lower.index("product")
-        product["name"] = row[df.columns[idx]]
-      elif "model" in columns_lower:
-        idx = columns_lower.index("model")
-        product["name"] = row[df.columns[idx]]
-      for col in df.columns:
-        if col == part_num_col:
-          continue
-        product["specifications"][str(col)] = str(row[col])
-      products.append(product)
-  return products
+import re
+
+
+def looks_like_part_number(value):
+    if value is None:
+        return False
+
+    value = str(value).strip()
+
+    if not value:
+        return False
+
+    # Reject obvious headers
+    header_words = [
+        "part number",
+        "part no",
+        "description",
+        "product",
+        "model",
+        "rated current",
+    ]
+
+    value_lower = value.lower()
+
+    for word in header_words:
+        if word in value_lower:
+            return False
+
+    # Part numbers should not be extremely long
+    if len(value) > 50:
+        return False
+
+    # Must contain at least one letter or number
+    if not re.search(r"[A-Za-z0-9]", value):
+        return False
+
+    return True
+
+
+def find_part_number_columns(table):
+    """
+    Find columns that contain a PART NUMBER header.
+    """
+
+    if not table:
+        return []
+
+    max_columns = max(len(row) for row in table)
+
+    part_number_columns = []
+
+    # Look through every row for PART NUMBER
+    for row in table:
+
+        for col_index, value in enumerate(row):
+
+            if value is None:
+                continue
+
+            value = str(value).strip().lower()
+
+            if value in [
+                "part number",
+                "part no",
+                "part num",
+                "part_number",
+                "part_no",
+                "partnumber",
+            ]:
+                part_number_columns.append(col_index)
+
+    # Remove duplicates
+    return sorted(set(part_number_columns))
+
+
+def extract_products(table):
+    products = []
+
+    if not table:
+        return products
+
+    part_number_columns = find_part_number_columns(table)
+
+    # No PART NUMBER column found
+    if not part_number_columns:
+        return products
+
+    # Determine where the actual data starts.
+    #
+    # We look for rows containing something that looks
+    # like a part number.
+    for row in table:
+
+        for col_index in part_number_columns:
+
+            if col_index >= len(row):
+                continue
+
+            value = row[col_index]
+
+            if not looks_like_part_number(value):
+                continue
+
+            product = {
+                "part_num": str(value).strip(),
+                "specifications": {},
+            }
+
+            # Store the other values from this row
+            for index, cell in enumerate(row):
+
+                if index == col_index:
+                    continue
+
+                if cell is None:
+                    continue
+
+                cell = str(cell).strip()
+
+                if not cell:
+                    continue
+
+                product["specifications"][
+                    f"column_{index + 1}"
+                ] = cell
+
+            products.append(product)
+
+    return products

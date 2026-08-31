@@ -9,12 +9,12 @@ def extract_tables(pdf_file):
       for table in page_tables:
         if not table:
           continue
-        headers = table[0]
-        rows = table[1:]
-        df = pd.DataFrame(rows, columns=headers)
+        # headers = table[0]
+        # rows = table[1:]
+        # df = pd.DataFrame(rows, columns=headers)
         tables.append({
           "page": page_num,
           "table": table,
-          "dataframe": df
+          # "dataframe": df
         })
   return tables

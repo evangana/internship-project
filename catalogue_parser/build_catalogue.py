@@ -42,7 +42,7 @@ def build_catalogue(doc, images, tables):
     ]
 
     for table_info in page_tables:
-      products = extract_products(table_info["dataframe"])
+      products = extract_products(table_info["table"])
       catalogue[current_heading]["products"].extend(products)
 
   return catalogue
