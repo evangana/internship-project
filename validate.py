@@ -1,6 +1,8 @@
 import json
+import re
 from pathlib import Path
 from collections import Counter
+
 
 BASE_DIR = Path(__file__).resolve().parent
 JSON_FILE = BASE_DIR / "catalogue_parser" / "output" / "catalogue.json"
@@ -54,7 +56,7 @@ for section_name, section_data in catalogue.items():
     continue
   products = section_data.get("products", [])
 
-  #Chech if product exists
+  #Check if product exists
   if not products:
     empty_product_sections += 1
     continue
