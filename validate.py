@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 
 
 BASE_DIR = Path(__file__).resolve().parent
-JSON_FILE = BASE_DIR / "catalogue_parser" / "output" / "catalogue.json"
+JSON_FILE = BASE_DIR / "catalogue_parser" / "output" / "clean_catalogue.json"
 
 #Load catalogue
 with open(JSON_FILE, "r", encoding="utf-8") as f:
@@ -189,29 +189,29 @@ if suspicious_products:
         ))
 
 #Duplicate details
-if duplicates:
-    print()
-    print("=" * 20)
-    print("Duplicate part number details:")
-    print("=" * 20)
+# if duplicates:
+#     print()
+#     print("=" * 20)
+#     print("Duplicate part number details:")
+#     print("=" * 20)
 
-    for part_num, count in duplicates.items():
-      print()
-      print(f"Part Number: {part_num}")
-      print(f"Occurrences: {count}")
+#     for part_num, count in duplicates.items():
+#       print()
+#       print(f"Part Number: {part_num}")
+#       print(f"Occurrences: {count}")
 
-      occurrences = part_number_occurrences[part_num]
-      for occurrence_number, occurrence in enumerate(occurrences, start=1):
-        print()
-        print(f" Occurrence {occurrence_number}:")
-        print(f"  Section: {occurrence['section']}")
-        print(f"  Product Index: {occurrence['index']}")
-        print(" Product:")
-        print(json.dumps(
-          occurrence["product"], 
-          indent=4,
-          ensure_ascii=False
-        ))
+#       occurrences = part_number_occurrences[part_num]
+#       for occurrence_number, occurrence in enumerate(occurrences, start=1):
+#         print()
+#         print(f" Occurrence {occurrence_number}:")
+#         print(f"  Section: {occurrence['section']}")
+#         print(f"  Product Index: {occurrence['index']}")
+#         print(" Product:")
+#         print(json.dumps(
+#           occurrence["product"], 
+#           indent=4,
+#           ensure_ascii=False
+#         ))
 print()
 print("=" * 20)
 print("\nValidation complete.")

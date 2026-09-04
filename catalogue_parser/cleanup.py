@@ -1,5 +1,4 @@
 import json
-import pandas as pd
 from pathlib import Path
 from rules import check_part_number_quality
 
@@ -48,7 +47,7 @@ for section_name, section_data in catalogue.items():
       })
       continue
 
-    part_num = product.get("part_number")
+    part_num = product.get("part_num")
 
     #Missing part number
     if not part_num:
